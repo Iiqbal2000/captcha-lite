@@ -9,4 +9,9 @@ const (
 	MessageWrongAnswerLettersOnly
 	MessageWrongAnswer
 	MessageNonText
+
+	// MessageUnderAttack represent the under attack module
+	MessageUnderAttackOnlyAdmin
+	MessageUnderAttackAlreadyEnabled
+	MessageUnderAttackStarting
 )

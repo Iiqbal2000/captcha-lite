@@ -1,9 +1,13 @@
 package cmd
 
 import (
-	"teknologi-umum-bot/captcha"
-	"teknologi-umum-bot/locale"
-	"teknologi-umum-bot/logger"
+	"context"
+	"time"
+
+	"captcha-lite/captcha"
+	"captcha-lite/locale"
+	"captcha-lite/logger"
+	"captcha-lite/underattack"
 
 	"github.com/allegro/bigcache/v3"
 	tb "gopkg.in/telebot.v3"
@@ -20,6 +24,8 @@ type Dependency struct {
 	Logger   logger.Logger
 	Language string
 	captcha  *captcha.Dependencies
+
+	UnderAttack *underattack.Dependency
 }
 
 // New returns a pointer struct of Dependency
@@ -34,6 +40,16 @@ func New(deps Dependency) *Dependency {
 		localeLanguage = locale.EN
 	}
 
+	var underAttackDependency *underattack.Dependency = nil
+	if deps.UnderAttack != nil {
+		underAttackDependency = &underattack.Dependency{
+			Datastore: deps.UnderAttack.Datastore,
+			Memory:    deps.Memory,
+			Bot:       deps.Bot,
+			Logger:    deps.Logger,
+			Locale:    localeLanguage,
+		}
+	}
 	return &Dependency{
 		captcha: &captcha.Dependencies{
 			Memory: deps.Memory,
@@ -41,6 +57,7 @@ func New(deps Dependency) *Dependency {
 			Locale: localeLanguage,
 			Log:    deps.Logger,
 		},
+		UnderAttack: underAttackDependency,
 	}
 }
 
@@ -55,6 +72,25 @@ func (d *Dependency) OnTextHandler(c tb.Context) error {
 // added by someone else into the group), or they join
 // the group all by themselves.
 func (d *Dependency) OnUserJoinHandler(c tb.Context) error {
+	if d.UnderAttack != nil {
+		// This block will be executed only if the UnderAttack struct is not nil
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+		defer cancel()
+
+		underAttack, err := d.UnderAttack.AreWe(ctx, c.Chat().ID)
+		if err != nil {
+			d.Logger.HandleError(err)
+		}
+
+		if underAttack {
+			err := c.Bot().Ban(c.Chat(), &tb.ChatMember{User: c.Sender(), RestrictedUntil: tb.Forever()})
+			if err != nil {
+				d.Logger.HandleBotError(err, d.Bot, c.Message())
+			}
+			return nil
+		}
+	}
+
 	d.captcha.CaptchaUserJoin(c.Message())
 	return nil
 }

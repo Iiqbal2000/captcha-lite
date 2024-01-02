@@ -5,8 +5,9 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"teknologi-umum-bot/utils"
 	"time"
+
+	"captcha-lite/utils"
 
 	"github.com/allegro/bigcache/v3"
 	"github.com/pkg/errors"

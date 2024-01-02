@@ -1,8 +1,9 @@
 package utils_test
 
 import (
-	"teknologi-umum-bot/utils"
 	"testing"
+
+	"captcha-lite/utils"
 
 	tb "gopkg.in/telebot.v3"
 )

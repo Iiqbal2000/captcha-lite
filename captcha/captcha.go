@@ -1,8 +1,8 @@
 package captcha
 
 import (
-	"teknologi-umum-bot/locale"
-	"teknologi-umum-bot/logger"
+	"captcha-lite/locale"
+	"captcha-lite/logger"
 
 	"github.com/allegro/bigcache/v3"
 	tb "gopkg.in/telebot.v3"

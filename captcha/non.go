@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"strconv"
 	"strings"
-	"teknologi-umum-bot/locale"
-	"teknologi-umum-bot/utils"
 	"time"
+
+	"captcha-lite/locale"
+	"captcha-lite/utils"
 
 	tb "gopkg.in/telebot.v3"
 )

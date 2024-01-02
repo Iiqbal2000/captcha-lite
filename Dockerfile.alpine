@@ -1,4 +1,4 @@
-FROM golang:1.21-bookworm AS builder
+FROM golang:1.21-alpine3.18 AS builder
 
 WORKDIR /usr/app
 
@@ -6,9 +6,9 @@ COPY . .
 
 RUN go build -o captcha-lite .
 
-FROM debian:bookworm-slim
+FROM alpine:3.18
 
-RUN apt-get update && apt-get install -y curl ca-certificates openssl
+RUN apk update && apk add --no-cache curl ca-certificates openssl
 
 WORKDIR /app
 COPY . .

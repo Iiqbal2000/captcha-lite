@@ -3,8 +3,9 @@ package captcha
 import (
 	"strconv"
 	"strings"
-	"teknologi-umum-bot/locale"
-	"teknologi-umum-bot/utils"
+
+	"captcha-lite/locale"
+	"captcha-lite/utils"
 
 	tb "gopkg.in/telebot.v3"
 )

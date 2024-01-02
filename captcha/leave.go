@@ -3,7 +3,8 @@ package captcha
 import (
 	"encoding/json"
 	"strconv"
-	"teknologi-umum-bot/utils"
+
+	"captcha-lite/utils"
 
 	tb "gopkg.in/telebot.v3"
 )
